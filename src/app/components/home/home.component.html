@@ -14,8 +14,8 @@
                 <label for="unit_measurement" class="form-label">Unidad de medida</label>
                 <select class="form-control" formControlName="unit_measurement" name="unit" id="unit"
                     [(ngModel)]="unit_measurement">
-                    <option [value]="12" class="firstOption">Seleccione una unidad de medida</option>
-                    <option [value]="unit.id" *ngFor="let unit of unitMeasurementArray;">
+                    <option [value]="unit.id" [selected]="unit.id == 0" [ngClass]="unit.id == 0 ? 'firstOption' : ''"
+                        *ngFor="let unit of unitMeasurementArray;">
                         {{ unit.value }}
                     </option>
                 </select>
@@ -30,12 +30,10 @@
                 <input type="number" min="0" class="form-control" id="stock" formControlName="stock"
                     [(ngModel)]="stock">
             </div>
-            <button type="submit" class="btn btn-primary float-end" data-bs-dismiss="modal">{{ updateMaterial ? "Actualizar" : "Crear"  }}</button>
+            <button type="submit" class="btn btn-primary float-end" data-bs-dismiss="modal">{{ updateMaterial ?
+                "Actualizar" : "Crear" }}</button>
         </form>
     </div>
-    <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-    </div> -->
 </ng-template>
 
 <!-- Modal Delete -->
@@ -51,7 +49,6 @@
     </div>
     <div class="modal-footer d-flex">
         <div>
-            <!-- <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">Cancelar</button> -->
         </div>
         <div>
             <button class="btn btn-danger" (click)="deleteMaterial(materialId)">Eliminar</button>
@@ -67,10 +64,10 @@
     </div>
 
     <h2 class="text-center pt-5">CRUD Materiales</h2>
-    
+
     <div>
         <input type="text" class="form-control my-3" placeholder="Escribe el nombre del material" ngModel
-        (ngModelChange)="searchMaterial($event)">
+            (ngModelChange)="searchMaterial($event)">
     </div>
 
     <table class="table table-striped text-uppercase text-center">
@@ -101,7 +98,8 @@
 
                 <td class="d-flex justify-content-evenly">
                     <div>
-                        <button class="btn btn-primary" title="Editar" (click)="openVerticallyCentered(content, 'edit', material)">
+                        <button class="btn btn-primary" title="Editar"
+                            (click)="openVerticallyCentered(content, 'edit', material)">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
                     </div>

@@ -97,6 +97,10 @@ export class HomeComponent {
 
   unitMeasurementArray: any[] = [
     {
+      id: 0,
+      value: 'Seleccione una unidad de medida',
+    },
+    {
       id: 1,
       value: 'metro',
     },
