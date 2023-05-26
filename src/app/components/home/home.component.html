@@ -1,11 +1,11 @@
 <!-- Modal Add -->
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Datos del material</h4>
+        <h4 class="modal-title">{{ updateMaterial ? "Editar material" : "Crear material" }}</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="uploadForm" (ngSubmit)="submit()">
+        <form [formGroup]="uploadForm" (ngSubmit)="updateMaterial ? update() : submit()">
             <div class="mb-3">
                 <input type="text" [(ngModel)]="name" formControlName="name" class="form-control"
                     placeholder="Coloca el nombre" id="Name" aria-describedby="Name" autocomplete="off">
@@ -30,7 +30,7 @@
                 <input type="number" min="0" class="form-control" id="stock" formControlName="stock"
                     [(ngModel)]="stock">
             </div>
-            <button type="submit" class="btn btn-primary float-end" data-bs-dismiss="modal">Crear</button>
+            <button type="submit" class="btn btn-primary float-end" data-bs-dismiss="modal">{{ updateMaterial ? "Actualizar" : "Crear"  }}</button>
         </form>
     </div>
     <!-- <div class="modal-footer">
@@ -39,7 +39,6 @@
 </ng-template>
 
 <!-- Modal Delete -->
-
 <ng-template #deleteContent let-modal>
     <div class="modal-header">
         <h4 class="modal-title">Eliminar material</h4>
@@ -62,7 +61,7 @@
 
 <div class="container">
     <div class="float-end my-5 py-3">
-        <button class="btn btn-primary mb-2 me-2" (click)="openVerticallyCentered(content)">
+        <button class="btn btn-primary mb-2 me-2" (click)="openVerticallyCentered(content, 'create', null)">
             <i class="fa fa-plus" aria-hidden="true"></i> Agregar
         </button>
     </div>
@@ -97,7 +96,7 @@
 
                 <td class="d-flex justify-content-evenly">
                     <div>
-                        <button class="btn btn-primary" title="Editar" (click)="editMaterial(material)">
+                        <button class="btn btn-primary" title="Editar" (click)="openVerticallyCentered(content, 'edit', material)">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
                     </div>

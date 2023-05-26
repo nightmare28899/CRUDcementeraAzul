@@ -14,6 +14,8 @@ export class ServiceService {
       this.toastr.info('¡Material updated successfully!', 'Updated');
     } else if (type == 'deleted') {
       this.toastr.warning('¡Material deleted successfully!', 'Deleted');
+    } else if (type == 'stock') {
+      this.toastr.warning('¡Stock is empty!', 'Warning');
     } else {
       this.toastr.error('Please fill all the fields', 'Error');
     }

@@ -100,6 +100,7 @@ export class HomeComponent {
   total: number = 0;
   materialName: string = '';
   materialId: number = 0;
+  updateMaterial: boolean = false;
 
   constructor(private serv: ServiceService, private modalService: NgbModal) {
     this.uploadForm = new FormGroup({
@@ -125,17 +126,52 @@ export class HomeComponent {
     return unit?.value;
   }
 
-  openVerticallyCentered(content: any) {
-    this.modalService.open(content);
+  openVerticallyCentered(content: any, type: string, material: any) {
+    if (type == 'create') {
+      this.unit_measurement = 12;
+      this.modalService.open(content);
+      this.updateMaterial = false;
+      this.name = '';
+      this.unit_measurement = 0;
+      this.price = 0;
+      this.stock = 0;
+      this.total = 0;
+    } else if ('edit') {
+      this.modalService.open(content);
+      this.uploadForm.setValue({
+        id: material.id,
+        name: material.name,
+        unit_measurement: material.unit_measurement,
+        price: material.price,
+        stock: material.stock,
+        total: material.total,
+      });
+
+      this.name = material.name;
+      this.unit_measurement = material.unit_measurement;
+      this.price = material.price;
+      this.stock = material.stock;
+      this.total = material.total;
+
+      this.updateMaterial = true;
+    }
   }
 
   submit() {
-    if (this.uploadForm.value.name != '' && this.uploadForm.value.price != 0 && this.uploadForm.value.unit_measurement != 0) {
+    if (
+      this.uploadForm.value.name != '' &&
+      this.uploadForm.value.price != 0 &&
+      this.uploadForm.value.unit_measurement != 0
+    ) {
       this.total = this.price * this.stock;
       this.uploadForm.value.id = this.materialArray.length + 1;
       this.uploadForm.value.total = this.total;
       this.materialArray.push(this.uploadForm.value);
       localStorage.setItem('materials', JSON.stringify(this.materialArray));
+
+      if (this.uploadForm.value.stock == 0) {
+        this.serv.toast('stock');
+      }
 
       this.serv.toast('created');
       this.uploadForm.reset();
@@ -143,6 +179,25 @@ export class HomeComponent {
     } else {
       this.serv.toast('error');
     }
+  }
+
+  update() {
+    this.total = this.price * this.stock;
+    this.uploadForm.value.total = this.total;
+    this.uploadForm.value.name = this.name;
+    this.uploadForm.value.unit_measurement = this.unit_measurement;
+    this.uploadForm.value.price = this.price;
+    this.uploadForm.value.stock = this.stock;
+
+    const updateData = this.materialArray.findIndex(
+      (x) => x.id == this.uploadForm.value.id
+    );
+
+    this.materialArray[updateData] = this.uploadForm.value;
+
+    localStorage.setItem('materials', JSON.stringify(this.materialArray));
+    this.serv.toast('updated');
+    this.modalService.dismissAll();
   }
 
   editMaterial(material: Material) {
