@@ -1,0 +1,79 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Datos del material</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="uploadForm" (ngSubmit)="submit()">
+            <div class="mb-3">
+                <input type="text" [(ngModel)]="name" formControlName="name" class="form-control" placeholder="Coloca el nombre" id="Name" aria-describedby="Name">
+            </div>
+            <div class="mb-3">
+                <label for="unitMeasurement" class="form-label">Unidad de medida</label>
+                <select class="form-control" formControlName="unit_measurement" name="unit" id="unit" [(ngModel)]="unitMeasurement">
+                    <option class="firstOption" disabled selected>Seleccione una unidad de medida</option>
+                    <option [value]="unit.id" *ngFor="let unit of unit_measurement; index as k">
+                        {{ unit.value }}
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" min="0" class="form-control" id="price" formControlName="price" [(ngModel)]="price">
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" min="0" class="form-control" id="stock" formControlName="stock" [(ngModel)]="stock">
+            </div>
+            <button type="submit" class="btn btn-primary float-end" data-bs-dismiss="modal">Crear</button>
+        </form>
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div> -->
+</ng-template>
+
+<div class="container">
+    <div class="float-end mt-5 pt-3">
+        <button class="btn btn-primary mb-2 me-2" (click)="openVerticallyCentered(content)">
+            <i class="fa fa-plus" aria-hidden="true"></i> Agregar
+        </button>
+    </div>
+
+    <table class="table table-striped text-uppercase text-center">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Unidad de medida</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let material of materialArray; index as i">
+                <th scope="row">{{ material.id }}</th>
+                <td>
+                    {{ material.name }}
+                </td>
+                <td>
+                    {{ material.unit_measurement }}
+                </td>
+
+                <td>{{ material.price | currency }}</td>
+                <td>{{ material.stock | number }}</td>
+                <td>{{ material.total | currency }}</td>
+
+                <td class="d-flex justify-content-evenly">
+                    <button class="btn btn-primary" title="Editar" (click)="editMaterial(material)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-danger" title="Eliminar" (click)="deleteMaterial(material)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
