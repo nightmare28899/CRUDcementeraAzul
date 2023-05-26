@@ -177,7 +177,7 @@ export class HomeComponent {
   }
 
   openVerticallyCentered(content: any, type: string, material: any) {
-    if (type == 'create') {
+    if (type === 'create') {
       this.unit_measurement = 12;
       this.modalService.open(content);
       this.updateMaterial = false;
@@ -186,7 +186,7 @@ export class HomeComponent {
       this.price = 0;
       this.stock = 0;
       this.total = 0;
-    } else if ('edit') {
+    } else if (type === 'edit') {
       this.modalService.open(content);
       this.uploadForm.setValue({
         id: material.id,
