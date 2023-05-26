@@ -19,7 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
     MaterialsModule,
     NgbModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot({ timeOut: 3000, positionClass: 'toast-top-center', preventDuplicates: true })
+    ToastrModule.forRoot({ timeOut: 3000, positionClass: 'toast-top-right', preventDuplicates: true })
   ],
   providers: [],
   bootstrap: [AppComponent]

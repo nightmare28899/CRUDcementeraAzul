@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ServiceService } from 'src/app/service/service.service';
 import { Material } from '../../interface/Material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -98,6 +98,8 @@ export class HomeComponent {
   price: number = 0;
   stock: number = 0;
   total: number = 0;
+  materialName: string = '';
+  materialId: number = 0;
 
   constructor(private serv: ServiceService, private modalService: NgbModal) {
     this.uploadForm = new FormGroup({
@@ -114,7 +116,7 @@ export class HomeComponent {
     if (localStorage.getItem('materials') != null) {
       this.materialArray = JSON.parse(
         localStorage.getItem('materials') || '{}'
-      );      
+      );
     }
   }
 
@@ -128,26 +130,36 @@ export class HomeComponent {
   }
 
   submit() {
-    this.total = this.price * this.stock;
-    this.uploadForm.value.id = this.materialArray.length + 1;
-    this.uploadForm.value.total = this.total;
-    this.materialArray.push(this.uploadForm.value);
-    localStorage.setItem(
-      'materials',
-      JSON.stringify(this.materialArray)
-    );
+    if (this.uploadForm.value.name != '' && this.uploadForm.value.price != 0 && this.uploadForm.value.unit_measurement != 0) {
+      this.total = this.price * this.stock;
+      this.uploadForm.value.id = this.materialArray.length + 1;
+      this.uploadForm.value.total = this.total;
+      this.materialArray.push(this.uploadForm.value);
+      localStorage.setItem('materials', JSON.stringify(this.materialArray));
 
-    this.uploadForm.reset();
-    this.modalService.dismissAll();
-    this.serv.toast('created');
+      this.serv.toast('created');
+      this.uploadForm.reset();
+      this.modalService.dismissAll();
+    } else {
+      this.serv.toast('error');
+    }
   }
 
   editMaterial(material: Material) {
     console.log(material);
   }
 
-  deleteMaterial(material: Material) {
-    console.log(material);
+  openModalDelete(deleteContent: any, material: Material) {
+    this.modalService.open(deleteContent);
+    this.materialName = material.name;
+    this.materialId = material.id;
+  }
+
+  deleteMaterial(materialId: number) {
+    this.materialArray = this.materialArray.filter((x) => x.id != materialId);
+    this.serv.toast('deleted');
+    localStorage.setItem('materials', JSON.stringify(this.materialArray));
+    this.modalService.dismissAll();
   }
 
   toast(type: string) {
