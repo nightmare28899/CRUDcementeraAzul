@@ -67,6 +67,11 @@
     </div>
 
     <h2 class="text-center pt-5">CRUD Materiales</h2>
+    
+    <div>
+        <input type="text" class="form-control my-3" placeholder="Escribe el nombre del material" ngModel
+        (ngModelChange)="searchMaterial($event)">
+    </div>
 
     <table class="table table-striped text-uppercase text-center">
         <thead>
@@ -81,7 +86,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let material of materialArray; index as i">
+            <tr *ngFor="let material of materialArrayFilter; index as i">
                 <th scope="row">{{ material.id }}</th>
                 <td>
                     {{ material.name }}

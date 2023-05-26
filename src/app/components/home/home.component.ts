@@ -52,6 +52,48 @@ export class HomeComponent {
       total: 25000,
     },
   ];
+  materialArrayFilter: Material[] = [
+    {
+      id: 1,
+      name: 'Material 1',
+      unit_measurement: 1,
+      price: 100,
+      stock: 10,
+      total: 1000,
+    },
+    {
+      id: 2,
+      name: 'Material 2',
+      unit_measurement: 8,
+      price: 200,
+      stock: 20,
+      total: 4000,
+    },
+    {
+      id: 3,
+      name: 'Material 3',
+      unit_measurement: 3,
+      price: 300,
+      stock: 30,
+      total: 9000,
+    },
+    {
+      id: 4,
+      name: 'Material 4',
+      unit_measurement: 6,
+      price: 400,
+      stock: 40,
+      total: 16000,
+    },
+    {
+      id: 5,
+      name: 'Material 5',
+      unit_measurement: 4,
+      price: 500,
+      stock: 50,
+      total: 25000,
+    },
+  ];
 
   unitMeasurementArray: any[] = [
     {
@@ -101,6 +143,7 @@ export class HomeComponent {
   materialName: string = '';
   materialId: number = 0;
   updateMaterial: boolean = false;
+  search: string = '';
 
   constructor(private serv: ServiceService, private modalService: NgbModal) {
     this.uploadForm = new FormGroup({
@@ -116,6 +159,9 @@ export class HomeComponent {
   ngOnInit() {
     if (localStorage.getItem('materials') != null) {
       this.materialArray = JSON.parse(
+        localStorage.getItem('materials') || '{}'
+      );
+      this.materialArrayFilter = JSON.parse(
         localStorage.getItem('materials') || '{}'
       );
     }
@@ -166,6 +212,7 @@ export class HomeComponent {
       this.total = this.price * this.stock;
       this.uploadForm.value.id = this.materialArray.length + 1;
       this.uploadForm.value.total = this.total;
+      this.materialArrayFilter.push(this.uploadForm.value);
       this.materialArray.push(this.uploadForm.value);
       localStorage.setItem('materials', JSON.stringify(this.materialArray));
 
@@ -189,19 +236,25 @@ export class HomeComponent {
     this.uploadForm.value.price = this.price;
     this.uploadForm.value.stock = this.stock;
 
-    const updateData = this.materialArray.findIndex(
+    const updateData = this.materialArrayFilter.findIndex(
       (x) => x.id == this.uploadForm.value.id
     );
 
-    this.materialArray[updateData] = this.uploadForm.value;
+    this.materialArrayFilter[updateData] = this.uploadForm.value;
 
-    localStorage.setItem('materials', JSON.stringify(this.materialArray));
+    localStorage.setItem('materials', JSON.stringify(this.materialArrayFilter));
     this.serv.toast('updated');
     this.modalService.dismissAll();
   }
 
-  editMaterial(material: Material) {
-    console.log(material);
+  searchMaterial(query: string) {
+    this.materialArrayFilter = this.materialArray.filter((x) => {
+      return x.name
+        .toLocaleLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .includes(query.toLocaleLowerCase());
+    });
   }
 
   openModalDelete(deleteContent: any, material: Material) {
