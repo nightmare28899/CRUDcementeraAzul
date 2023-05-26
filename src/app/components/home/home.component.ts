@@ -244,6 +244,9 @@ export class HomeComponent {
 
     localStorage.setItem('materials', JSON.stringify(this.materialArrayFilter));
     this.serv.toast('updated');
+    if (this.uploadForm.value.stock == 0) {
+      this.serv.toast('stock');
+    }
     this.modalService.dismissAll();
   }
 
@@ -266,6 +269,7 @@ export class HomeComponent {
   deleteMaterial(materialId: number) {
     this.materialArray = this.materialArray.filter((x) => x.id != materialId);
     this.serv.toast('deleted');
+    this.materialArrayFilter = this.materialArray;
     localStorage.setItem('materials', JSON.stringify(this.materialArray));
     this.modalService.dismissAll();
   }
