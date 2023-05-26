@@ -9,10 +9,10 @@
                 <input type="text" [(ngModel)]="name" formControlName="name" class="form-control" placeholder="Coloca el nombre" id="Name" aria-describedby="Name">
             </div>
             <div class="mb-3">
-                <label for="unitMeasurement" class="form-label">Unidad de medida</label>
-                <select class="form-control" formControlName="unit_measurement" name="unit" id="unit" [(ngModel)]="unitMeasurement">
-                    <option class="firstOption" disabled selected>Seleccione una unidad de medida</option>
-                    <option [value]="unit.id" *ngFor="let unit of unit_measurement; index as k">
+                <label for="unit_measurement" class="form-label">Unidad de medida</label>
+                <select class="form-control" formControlName="unit_measurement" name="unit" id="unit" [(ngModel)]="unit_measurement">
+                    <option [value]="12" class="firstOption">Seleccione una unidad de medida</option>
+                    <option [value]="unit.id" *ngFor="let unit of unitMeasurementArray;">
                         {{ unit.value }}
                     </option>
                 </select>
@@ -58,7 +58,7 @@
                     {{ material.name }}
                 </td>
                 <td>
-                    {{ material.unit_measurement }}
+                    {{ getTheUnitMeasurement(material.unit_measurement) }}
                 </td>
 
                 <td>{{ material.price | currency }}</td>
